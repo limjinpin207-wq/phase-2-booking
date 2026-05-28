@@ -4,21 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>June Unit Booking</title>
+    <title>Anchorvale June Cooling Schedule</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Modern App Styling - Fully Responsive */
+        /* New Cooling Palette & Modern Font Styling */
+        :root {
+            /* COOLING PALETTE */
+            --bg-frost-start: #BBDEFB; /* Light Frost Blue */
+            --bg-frost-end: #FFFFFF; /* Crisp White */
+            --glass-base: rgba(255, 255, 255, 0.90);
+            --text-primary: #1A202C; /* Dark Cool Gray */
+            --text-secondary: #4A5568; /* Medium Cool Gray */
+            --interactive-neutral-bg: #EDF2F7; /* Light Cool Gray */
+            --interactive-neutral-border: #E2E8F0;
+            --interactive-hover-bg: #FFFFFF;
+            
+            /* TECHNOLOGY & COOLING HIGHLIGHTS */
+            --accent-aqua: #4FD1C5; /* Cooling Aqua */
+            --accent-aqua-dark: #38B2AC;
+            --btn-start: #3182CE; /* Technology Blue */
+            --btn-end: #38B2AC; /* Aqua Green */
+            --btn-shadow: rgba(49, 130, 206, 0.3);
+            --selected-border: #BBDEFB;
+            --main-link-color: #3182CE;
+        }
+
         body {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 20px;
             min-height: 100vh;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            /* Updated to subtle, cooling ice-like pulse gradient */
+            background: linear-gradient(-45deg, var(--bg-frost-start), var(--bg-frost-end), var(--bg-frost-start), var(--bg-frost-end));
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
             box-sizing: border-box;
+            color: var(--text-primary);
         }
 
         @keyframes gradientBG {
@@ -27,20 +51,22 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* Frostier Glassmorphism Card Effect */
         .container {
             width: 100%;
             max-width: 650px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: var(--glass-base);
+            backdrop-filter: blur(12px);
             border-radius: 24px;
             padding: 30px 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 15px 35px rgba(187, 222, 251, 0.2);
+            border: 1px solid rgba(187, 222, 251, 0.5);
             box-sizing: border-box;
+            transition: all 0.3s ease;
         }
 
         h1 {
-            color: #1e293b;
+            color: var(--text-primary);
             margin: 0 0 24px 0;
             font-size: 1.8rem;
             text-align: center;
@@ -49,7 +75,7 @@
 
         .subtitle {
             text-align: center;
-            color: #64748b;
+            color: var(--text-secondary);
             margin-top: -15px;
             margin-bottom: 25px;
             font-size: 0.95rem;
@@ -59,7 +85,7 @@
             font-weight: 700;
             display: block;
             margin-bottom: 10px;
-            color: #334155;
+            color: var(--text-secondary);
             font-size: 0.95rem;
         }
 
@@ -67,29 +93,39 @@
             width: 100%;
             padding: 16px;
             font-size: 16px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--interactive-neutral-border);
             border-radius: 14px;
-            background-color: #f8fafc;
-            color: #0f172a;
+            background-color: var(--interactive-neutral-bg);
+            color: var(--text-primary);
             margin-bottom: 24px;
             appearance: none;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(187, 222, 251, 0.1);
             cursor: pointer;
         }
 
         select:focus {
             outline: none;
-            border-color: #3b82f6;
-            background-color: #fff;
+            border-color: var(--accent-aqua);
+            background-color: var(--interactive-hover-bg);
+        }
+
+        @media (hover: hover) {
+            select:hover:not(:disabled) {
+                border-color: var(--selected-border);
+                background-color: var(--interactive-hover-bg);
+            }
         }
 
         select:disabled {
-            background-color: #e2e8f0;
+            background-color: var(--interactive-neutral-border);
             color: #94a3b8;
+            border-color: var(--interactive-neutral-border);
             cursor: not-allowed;
+            box-shadow: none;
         }
 
-        #calendar-section, #booking-details-section {
+        #calendar-section {
             display: none;
         }
 
@@ -101,7 +137,7 @@
         }
 
         .day-btn {
-            background-color: #f1f5f9;
+            background-color: var(--interactive-neutral-bg);
             border: none;
             border-radius: 12px;
             aspect-ratio: 1;
@@ -110,49 +146,59 @@
             justify-content: center;
             font-size: 1.1rem;
             font-weight: 700;
-            color: #475569;
+            color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             -webkit-tap-highlight-color: transparent;
+            box-shadow: inset 0 -2px 0 rgba(187, 222, 251, 0.1);
+        }
+
+        @media (hover: hover) {
+            .day-btn:hover {
+                background-color: var(--selected-border);
+                color: var(--text-primary);
+                transform: translateY(-2px);
+            }
+
+            .day-btn.selected:hover {
+                background-color: var(--accent-aqua-dark);
+            }
         }
 
         .day-btn.selected {
-            background-color: #6366f1;
+            background-color: var(--accent-aqua);
             color: white;
-            transform: scale(0.95);
-            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
+            transform: scale(0.95) translateY(0);
+            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .details-card {
-            background: #f8fafc;
-            border: 2px dashed #cbd5e1;
+        /* Icy blue themed fan section container */
+        #fan-section {
+            background: var(--interactive-neutral-bg);
+            border: 2px dashed #A0AEC0;
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 24px;
+            display: none;
             animation: fadeIn 0.4s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .validation-msg {
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 20px;
-            min-height: 20px;
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-        .msg-error { background-color: #fee2e2; color: #ef4444; }
-        .msg-success { background-color: #dcfce3; color: #16a34a; }
-        .bonus-text { color: #d97706; font-weight: 800; display: block; margin-top: 5px;}
-
+        /* Cool Technology Gradient Save Button */
         .save-btn {
             width: 100%;
-            background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);
+            background: linear-gradient(135deg, var(--btn-start) 0%, var(--btn-end) 100%);
             color: white;
             border: none;
             padding: 18px;
@@ -160,34 +206,83 @@
             font-size: 1.1rem;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 4px 15px var(--btn-shadow);
             transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (hover: hover) {
+            .save-btn:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(49, 130, 206, 0.4);
+            }
+        }
+
+        .save-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 10px rgba(49, 130, 206, 0.2);
         }
 
         .save-btn:disabled {
-            background: #94a3b8;
+            background: #A0AEC0; /* Cold Gray Disabled State */
             box-shadow: none;
             cursor: not-allowed;
-            transform: none;
         }
 
         #status-msg {
             text-align: center;
             font-weight: 700;
             margin-top: 16px;
-            color: #fff;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            color: var(--btn-start);
+            text-shadow: 0 1px 2px rgba(187, 222, 251, 0.2);
             min-height: 20px;
         }
 
+        .loading-pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Updated Main Link Styling */
         .main-page-link {
             display: block;
             text-align: center;
             margin-top: 24px;
-            color: #6366f1;
+            color: var(--main-link-color);
             text-decoration: none;
             font-weight: 700;
             font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .main-page-link:hover {
+            color: var(--text-primary);
+            text-decoration: underline;
+        }
+
+        @media (min-width: 600px) {
+            .container {
+                padding: 40px;
+                border-radius: 30px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .calendar-grid {
+                gap: 12px;
+            }
+
+            .day-btn {
+                font-size: 1.2rem;
+                border-radius: 16px;
+            }
         }
     </style>
 </head>
@@ -196,12 +291,12 @@
 
     <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <div class="container">
-            <h1>🗓️ Phase 2 Booking</h1>
-            <p class="subtitle">Select general availability, then assign works</p>
+            <h1>❄️ June Cooling Schedule</h1>
+            <p class="subtitle">Select your unit & availability to schedule cooling works.</p>
 
-            <label for="unit-select">🏢 Select Unit:</label>
+            <label for="unit-select">🏢 Select your Anchorvale Unit:</label>
             <select id="unit-select" disabled>
-                <option value="" disabled selected id="default-option">🔄 Loading secure database...</option>
+                <option value="" disabled selected id="default-option">🔄 Connecting to secure cooling database...</option>
                 <option value="#12-119">#12-119</option>
                 <option value="#13-105">#13-105</option>
                 <option value="#17-127">#17-127</option>
@@ -217,230 +312,149 @@
             </select>
 
             <div id="calendar-section">
-                <label>📅 1. Select ALL Available Days (June):</label>
+                <label>🌬️ Available Days (June):</label>
                 <div class="calendar-grid" id="calendar-grid"></div>
 
-                <div id="booking-details-section">
-                    <div class="details-card">
-                        <label>🛠️ 2. Fan Installation Date:</label>
-                        <select id="fan-date-select" onchange="validateSchedule()">
-                            <option value="">-- Choose date --</option>
-                        </select>
-
-                        <label>⏱️ Fan Installation Time Block:</label>
-                        <select id="fan-time-select" onchange="validateSchedule()">
-                            <option value="">-- Choose 2-hour slot --</option>
-                            <option value="10am-12pm">10:00 AM – 12:00 PM</option>
-                            <option value="12pm-2pm">12:00 PM – 2:00 PM</option>
-                            <option value="2pm-4pm">2:00 PM – 4:00 PM</option>
-                            <option value="4pm-6pm">4:00 PM – 6:00 PM</option>
-                        </select>
-
-                        <hr style="border: 1px solid #e2e8f0; margin: 24px 0;">
-
-                        <label>📋 3. Survey Date 1 (Full Day):</label>
-                        <select id="survey-date-1" onchange="validateSchedule()">
-                            <option value="">-- Choose date --</option>
-                        </select>
-
-                        <label>📋 4. Survey Date 2 (Full Day):</label>
-                        <select id="survey-date-2" onchange="validateSchedule()">
-                            <option value="">-- Choose date --</option>
-                        </select>
-                    </div>
-                    
-                    <div id="validation-msg" class="validation-msg" style="display: none;"></div>
-                    <button class="save-btn" id="save-btn" onclick="saveData()" disabled>💾 Save Schedule</button>
+                <div id="fan-section">
+                    <label>❄️ Fan Installation Date:</label>
+                    <select id="fan-select">
+                        <option value="">-- Choose from available dates --</option>
+                    </select>
                 </div>
+
+                <button class="save-btn" id="save-btn" onclick="saveData()">💾 Save & Send Cool Schedule</button>
             </div>
 
-            <a href="https://jonahchoon.github.io/HDBHeatResilience/" class="main-page-link" target="_blank">🏠 View Main Page</a>
+            <a href="https://jonahchoon.github.io/HDBHeatResilience/" class="main-page-link" target="_blank">🏠 View Anchorvale Heat Resilience Page ↗️</a>
 
         </div>
-        <div id="status-msg">Connecting to server...</div>
+        <div id="status-msg" class="loading-pulse">Connecting to server...</div>
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykIDHVfZywrzRR5mgo-TBdKbOMGsVg1ZR3IOHgud8NTlXPnzSgi7GHdD327PCZ3ro/exec";
+        // --- IMPORTANT: PASTE YOUR APP SCRIPT WEB APP URL HERE ---
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzP1NP7VOL1V9eJ96qQVC8OTbTzZwu-nP3Qf6IRKMRX8cN9KTlYctWUBmaFlinOICT-/exec";
+
         let database = {};
         const statusMsg = document.getElementById('status-msg');
         const unitSelect = document.getElementById('unit-select');
+        const defaultOption = document.getElementById('default-option');
+        const calendarSection = document.getElementById('calendar-section');
         const calendarGrid = document.getElementById('calendar-grid');
-        
-        // Form Elements
-        const bookingSection = document.getElementById('booking-details-section');
-        const fanDateSelect = document.getElementById('fan-date-select');
-        const fanTimeSelect = document.getElementById('fan-time-select');
-        const surveyDate1 = document.getElementById('survey-date-1');
-        const surveyDate2 = document.getElementById('survey-date-2');
-        const saveBtn = document.getElementById('save-btn');
-        const validationMsg = document.getElementById('validation-msg');
+        const fanSection = document.getElementById('fan-section');
+        const fanSelect = document.getElementById('fan-select');
 
-        // Build 30 calendar buttons
+        // Build the 30 calendar buttons
         for (let i = 1; i <= 30; i++) {
             const btn = document.createElement('button');
             btn.className = 'day-btn';
             btn.innerText = i;
             btn.onclick = () => {
                 btn.classList.toggle('selected');
-                updateDropdowns();
+                updateFanOptions();
             };
             calendarGrid.appendChild(btn);
         }
 
+        // Fetch data
         window.onload = () => {
             fetch(SCRIPT_URL)
                 .then(response => response.json())
                 .then(data => {
                     database = data;
                     unitSelect.disabled = false;
-                    document.getElementById('default-option').text = "-- Tap to choose a unit --";
-                    statusMsg.innerText = "✨ Connected to database";
+                    defaultOption.text = "-- Tap to choose your unit --";
+                    statusMsg.classList.remove('loading-pulse');
+                    statusMsg.innerText = "✨ Connected to cooling database";
                     setTimeout(() => statusMsg.innerText = "", 2500);
                 })
                 .catch(error => {
-                    statusMsg.innerText = "⚠️ Error loading data. Refresh page.";
+                    statusMsg.classList.remove('loading-pulse');
+                    statusMsg.innerText = "⚠️ Error loading cooling data. Refresh page.";
                 });
         };
 
+        // Select unit logic
         unitSelect.addEventListener('change', (e) => {
-            document.getElementById('calendar-section').style.display = "block";
-            document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('selected'));
-            resetForm();
-            
             const selectedUnit = e.target.value;
+            calendarSection.style.display = "block";
+
+            document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('selected'));
+            fanSelect.innerHTML = '<option value="">-- Choose from available dates --</option>';
+            fanSection.style.display = "none";
+
             if (database[selectedUnit]) {
                 const savedData = database[selectedUnit];
+
                 document.querySelectorAll('.day-btn').forEach(btn => {
-                    if (savedData.dates && savedData.dates.includes(btn.innerText)) {
+                    if (savedData.dates.includes(btn.innerText)) {
                         btn.classList.add('selected');
                     }
                 });
-                updateDropdowns();
-                
-                // Repopulate previous selections if they exist
-                if (savedData.fanDate) fanDateSelect.value = savedData.fanDate;
-                if (savedData.fanTimeBlock) fanTimeSelect.value = savedData.fanTimeBlock;
-                if (savedData.surveyDates) {
-                    surveyDate1.value = savedData.surveyDates[0] || "";
-                    surveyDate2.value = savedData.surveyDates[1] || "";
+
+                updateFanOptions();
+
+                if (savedData.fanDate) {
+                    fanSelect.value = savedData.fanDate;
                 }
-                validateSchedule();
             }
         });
 
-        function updateDropdowns() {
+        // Update fan options
+        function updateFanOptions() {
             const selectedButtons = document.querySelectorAll('.day-btn.selected');
-            const dates = Array.from(selectedButtons).map(btn => parseInt(btn.innerText)).sort((a,b) => a - b);
-            
-            // Store current selections to reapply if still valid
-            const currFan = fanDateSelect.value;
-            const currS1 = surveyDate1.value;
-            const currS2 = surveyDate2.value;
+            const dates = Array.from(selectedButtons).map(btn => btn.innerText);
+            const currentFanSelection = fanSelect.value;
 
-            const defaultOpt = '<option value="">-- Choose date --</option>';
-            fanDateSelect.innerHTML = defaultOpt;
-            surveyDate1.innerHTML = defaultOpt;
-            surveyDate2.innerHTML = defaultOpt;
+            fanSelect.innerHTML = '<option value="">-- Choose from available dates --</option>';
 
-            if (dates.length >= 3) { // Minimum 3 days needed (1 fan, 2 survey)
-                bookingSection.style.display = "block";
-                
+            if (dates.length > 0) {
+                fanSection.style.display = "block";
                 dates.forEach(date => {
-                    const optText = `June ${date}`;
-                    fanDateSelect.add(new Option(optText, date));
-                    surveyDate1.add(new Option(optText, date));
-                    surveyDate2.add(new Option(optText, date));
+                    const option = document.createElement('option');
+                    option.value = date;
+                    option.text = `June ${date}`;
+                    fanSelect.appendChild(option);
                 });
-
-                if (dates.includes(parseInt(currFan))) fanDateSelect.value = currFan;
-                if (dates.includes(parseInt(currS1))) surveyDate1.value = currS1;
-                if (dates.includes(parseInt(currS2))) surveyDate2.value = currS2;
+                if (dates.includes(currentFanSelection)) {
+                    fanSelect.value = currentFanSelection;
+                }
             } else {
-                bookingSection.style.display = "none";
-                resetForm();
+                fanSection.style.display = "none";
             }
-            validateSchedule();
         }
 
-        function resetForm() {
-            fanDateSelect.value = "";
-            fanTimeSelect.value = "";
-            surveyDate1.value = "";
-            surveyDate2.value = "";
-            validationMsg.style.display = "none";
-            saveBtn.disabled = true;
-        }
-
-        function validateSchedule() {
-            if (bookingSection.style.display === "none") return;
-
-            const fDate = parseInt(fanDateSelect.value);
-            const fTime = fanTimeSelect.value;
-            const s1 = parseInt(surveyDate1.value);
-            const s2 = parseInt(surveyDate2.value);
-
-            validationMsg.style.display = "block";
-            validationMsg.className = "validation-msg msg-error";
-            saveBtn.disabled = true;
-
-            if (!fDate || !fTime || !s1 || !s2) {
-                validationMsg.innerText = "⚠️ Please assign all dates and times.";
-                return;
-            }
-
-            if (s1 === s2) {
-                validationMsg.innerText = "⚠️ Survey dates must be two distinct days.";
-                return;
-            }
-
-            if (fDate >= s1 || fDate >= s2) {
-                validationMsg.innerText = "⚠️ Fan installation must be scheduled BEFORE the survey dates.";
-                return;
-            }
-
-            // If all checks pass
-            validationMsg.className = "validation-msg msg-success";
-            let msg = "✅ Schedule is logically valid.";
-            
-            if (Math.abs(s1 - s2) === 1) {
-                msg += "<span class='bonus-text'>🌟 Bonus: Survey dates are back-to-back!</span>";
-            }
-            
-            validationMsg.innerHTML = msg;
-            saveBtn.disabled = false;
-        }
-
+        // Save data
         function saveData() {
             const selectedUnit = unitSelect.value;
-            const availableDates = Array.from(document.querySelectorAll('.day-btn.selected')).map(btn => btn.innerText);
-            
-            const payload = { 
-                unit: selectedUnit, 
-                dates: availableDates, // Full pool of availability
-                fanDate: fanDateSelect.value, 
-                fanTimeBlock: fanTimeSelect.value,
-                surveyDates: [surveyDate1.value, surveyDate2.value]
-            };
+            const buttons = document.querySelectorAll('.day-btn.selected');
+            const dates = Array.from(buttons).map(btn => btn.innerText);
+            const fanDate = fanSelect.value;
 
-            statusMsg.innerText = "⏳ Saving secure data...";
-            saveBtn.disabled = true;
+            statusMsg.classList.add('loading-pulse');
+            statusMsg.innerText = "⏳ Saving secure cooling data...";
+            document.getElementById('save-btn').disabled = true;
 
             fetch(SCRIPT_URL, {
                 method: 'POST',
-                body: JSON.stringify(payload)
+                body: JSON.stringify({ unit: selectedUnit, dates: dates, fanDate: fanDate })
             })
-            .then(response => response.json())
-            .then(data => {
-                database[selectedUnit] = payload;
-                statusMsg.innerText = "✅ Saved successfully!";
-                setTimeout(() => statusMsg.innerText = "", 3000);
-            })
-            .catch(error => {
-                statusMsg.innerText = "❌ Failed to save. Check connection.";
-                saveBtn.disabled = false;
-            });
+                .then(response => response.json())
+                .then(data => {
+                    database[selectedUnit] = { dates: dates, fanDate: fanDate };
+                    statusMsg.classList.remove('loading-pulse');
+                    statusMsg.innerText = "✅ Cool schedule saved successfully!";
+                    document.getElementById('save-btn').disabled = false;
+                    setTimeout(() => statusMsg.innerText = "", 3000);
+                })
+                .catch(error => {
+                    statusMsg.classList.remove('loading-pulse');
+                    statusMsg.innerText = "❌ Failed to save. Check cooling network.";
+                    document.getElementById('save-btn').disabled = false;
+                });
         }
     </script>
+
 </body>
+
 </html>
