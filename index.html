@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>June Unit Booking</title>
+    <style>
+        /* Modern App Styling - Fully Responsive */
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #1e293b;
+            margin: 0 0 24px 0;
+            font-size: 1.8rem;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-top: -15px;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        label {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 10px;
+            color: #334155;
+            font-size: 0.95rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            background-color: #f8fafc;
+            color: #0f172a;
+            margin-bottom: 24px;
+            appearance: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: #fff;
+        }
+
+        select:disabled {
+            background-color: #e2e8f0;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        #calendar-section, #booking-details-section {
+            display: none;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .day-btn {
+            background-color: #f1f5f9;
+            border: none;
+            border-radius: 12px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .day-btn.selected {
+            background-color: #6366f1;
+            color: white;
+            transform: scale(0.95);
+            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .details-card {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .validation-msg {
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 20px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .msg-error { background-color: #fee2e2; color: #ef4444; }
+        .msg-success { background-color: #dcfce3; color: #16a34a; }
+        .bonus-text { color: #d97706; font-weight: 800; display: block; margin-top: 5px;}
+
+        .save-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .save-btn:disabled {
+            background: #94a3b8;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #status-msg {
+            text-align: center;
+            font-weight: 700;
+            margin-top: 16px;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            min-height: 20px;
+        }
+
+        .main-page-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+        <div class="container">
+            <h1>🗓️ Phase 2 Booking</h1>
+            <p class="subtitle">Select general availability, then assign works</p>
+
+            <label for="unit-select">🏢 Select Unit:</label>
+            <select id="unit-select" disabled>
+                <option value="" disabled selected id="default-option">🔄 Loading secure database...</option>
+                <option value="#12-119">#12-119</option>
+                <option value="#13-105">#13-105</option>
+                <option value="#17-127">#17-127</option>
+                <option value="#07-141">#07-141</option>
+                <option value="#07-131">#07-131</option>
+                <option value="#07-137">#07-137</option>
+                <option value="#17-115">#17-115</option>
+                <option value="#15-117">#15-117</option>
+                <option value="#12-107">#12-107</option>
+                <option value="#03-125">#03-125</option>
+                <option value="#07-139">#07-139</option>
+                <option value="#15-125">#15-125</option>
+            </select>
+
+            <div id="calendar-section">
+                <label>📅 1. Select ALL Available Days (June):</label>
+                <div class="calendar-grid" id="calendar-grid"></div>
+
+                <div id="booking-details-section">
+                    <div class="details-card">
+                        <label>🛠️ 2. Fan Installation Date:</label>
+                        <select id="fan-date-select" onchange="validateSchedule()">
+                            <option value="">-- Choose date --</option>
+                        </select>
+
+                        <label>⏱️ Fan Installation Time Block:</label>
+                        <select id="fan-time-select" onchange="validateSchedule()">
+                            <option value="">-- Choose 2-hour slot --</option>
+                            <option value="10am-12pm">10:00 AM – 12:00 PM</option>
+                            <option value="12pm-2pm">12:00 PM – 2:00 PM</option>
+                            <option value="2pm-4pm">2:00 PM – 4:00 PM</option>
+                            <option value="4pm-6pm">4:00 PM – 6:00 PM</option>
+                        </select>
+
+                        <hr style="border: 1px solid #e2e8f0; margin: 24px 0;">
+
+                        <label>📋 3. Survey Date 1 (Full Day):</label>
+                        <select id="survey-date-1" onchange="validateSchedule()">
+                            <option value="">-- Choose date --</option>
+                        </select>
+
+                        <label>📋 4. Survey Date 2 (Full Day):</label>
+                        <select id="survey-date-2" onchange="validateSchedule()">
+                            <option value="">-- Choose date --</option>
+                        </select>
+                    </div>
+                    
+                    <div id="validation-msg" class="validation-msg" style="display: none;"></div>
+                    <button class="save-btn" id="save-btn" onclick="saveData()" disabled>💾 Save Schedule</button>
+                </div>
+            </div>
+
+            <a href="https://jonahchoon.github.io/HDBHeatResilience/" class="main-page-link" target="_blank">🏠 View Main Page</a>
+
+        </div>
+        <div id="status-msg">Connecting to server...</div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykIDHVfZywrzRR5mgo-TBdKbOMGsVg1ZR3IOHgud8NTlXPnzSgi7GHdD327PCZ3ro/exec";
+        let database = {};
+        const statusMsg = document.getElementById('status-msg');
+        const unitSelect = document.getElementById('unit-select');
+        const calendarGrid = document.getElementById('calendar-grid');
+        
+        // Form Elements
+        const bookingSection = document.getElementById('booking-details-section');
+        const fanDateSelect = document.getElementById('fan-date-select');
+        const fanTimeSelect = document.getElementById('fan-time-select');
+        const surveyDate1 = document.getElementById('survey-date-1');
+        const surveyDate2 = document.getElementById('survey-date-2');
+        const saveBtn = document.getElementById('save-btn');
+        const validationMsg = document.getElementById('validation-msg');
+
+        // Build 30 calendar buttons
+        for (let i = 1; i <= 30; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'day-btn';
+            btn.innerText = i;
+            btn.onclick = () => {
+                btn.classList.toggle('selected');
+                updateDropdowns();
+            };
+            calendarGrid.appendChild(btn);
+        }
+
+        window.onload = () => {
+            fetch(SCRIPT_URL)
+                .then(response => response.json())
+                .then(data => {
+                    database = data;
+                    unitSelect.disabled = false;
+                    document.getElementById('default-option').text = "-- Tap to choose a unit --";
+                    statusMsg.innerText = "✨ Connected to database";
+                    setTimeout(() => statusMsg.innerText = "", 2500);
+                })
+                .catch(error => {
+                    statusMsg.innerText = "⚠️ Error loading data. Refresh page.";
+                });
+        };
+
+        unitSelect.addEventListener('change', (e) => {
+            document.getElementById('calendar-section').style.display = "block";
+            document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('selected'));
+            resetForm();
+            
+            const selectedUnit = e.target.value;
+            if (database[selectedUnit]) {
+                const savedData = database[selectedUnit];
+                document.querySelectorAll('.day-btn').forEach(btn => {
+                    if (savedData.dates && savedData.dates.includes(btn.innerText)) {
+                        btn.classList.add('selected');
+                    }
+                });
+                updateDropdowns();
+                
+                // Repopulate previous selections if they exist
+                if (savedData.fanDate) fanDateSelect.value = savedData.fanDate;
+                if (savedData.fanTimeBlock) fanTimeSelect.value = savedData.fanTimeBlock;
+                if (savedData.surveyDates) {
+                    surveyDate1.value = savedData.surveyDates[0] || "";
+                    surveyDate2.value = savedData.surveyDates[1] || "";
+                }
+                validateSchedule();
+            }
+        });
+
+        function updateDropdowns() {
+            const selectedButtons = document.querySelectorAll('.day-btn.selected');
+            const dates = Array.from(selectedButtons).map(btn => parseInt(btn.innerText)).sort((a,b) => a - b);
+            
+            // Store current selections to reapply if still valid
+            const currFan = fanDateSelect.value;
+            const currS1 = surveyDate1.value;
+            const currS2 = surveyDate2.value;
+
+            const defaultOpt = '<option value="">-- Choose date --</option>';
+            fanDateSelect.innerHTML = defaultOpt;
+            surveyDate1.innerHTML = defaultOpt;
+            surveyDate2.innerHTML = defaultOpt;
+
+            if (dates.length >= 3) { // Minimum 3 days needed (1 fan, 2 survey)
+                bookingSection.style.display = "block";
+                
+                dates.forEach(date => {
+                    const optText = `June ${date}`;
+                    fanDateSelect.add(new Option(optText, date));
+                    surveyDate1.add(new Option(optText, date));
+                    surveyDate2.add(new Option(optText, date));
+                });
+
+                if (dates.includes(parseInt(currFan))) fanDateSelect.value = currFan;
+                if (dates.includes(parseInt(currS1))) surveyDate1.value = currS1;
+                if (dates.includes(parseInt(currS2))) surveyDate2.value = currS2;
+            } else {
+                bookingSection.style.display = "none";
+                resetForm();
+            }
+            validateSchedule();
+        }
+
+        function resetForm() {
+            fanDateSelect.value = "";
+            fanTimeSelect.value = "";
+            surveyDate1.value = "";
+            surveyDate2.value = "";
+            validationMsg.style.display = "none";
+            saveBtn.disabled = true;
+        }
+
+        function validateSchedule() {
+            if (bookingSection.style.display === "none") return;
+
+            const fDate = parseInt(fanDateSelect.value);
+            const fTime = fanTimeSelect.value;
+            const s1 = parseInt(surveyDate1.value);
+            const s2 = parseInt(surveyDate2.value);
+
+            validationMsg.style.display = "block";
+            validationMsg.className = "validation-msg msg-error";
+            saveBtn.disabled = true;
+
+            if (!fDate || !fTime || !s1 || !s2) {
+                validationMsg.innerText = "⚠️ Please assign all dates and times.";
+                return;
+            }
+
+            if (s1 === s2) {
+                validationMsg.innerText = "⚠️ Survey dates must be two distinct days.";
+                return;
+            }
+
+            if (fDate >= s1 || fDate >= s2) {
+                validationMsg.innerText = "⚠️ Fan installation must be scheduled BEFORE the survey dates.";
+                return;
+            }
+
+            // If all checks pass
+            validationMsg.className = "validation-msg msg-success";
+            let msg = "✅ Schedule is logically valid.";
+            
+            if (Math.abs(s1 - s2) === 1) {
+                msg += "<span class='bonus-text'>🌟 Bonus: Survey dates are back-to-back!</span>";
+            }
+            
+            validationMsg.innerHTML = msg;
+            saveBtn.disabled = false;
+        }
+
+        function saveData() {
+            const selectedUnit = unitSelect.value;
+            const availableDates = Array.from(document.querySelectorAll('.day-btn.selected')).map(btn => btn.innerText);
+            
+            const payload = { 
+                unit: selectedUnit, 
+                dates: availableDates, // Full pool of availability
+                fanDate: fanDateSelect.value, 
+                fanTimeBlock: fanTimeSelect.value,
+                surveyDates: [surveyDate1.value, surveyDate2.value]
+            };
+
+            statusMsg.innerText = "⏳ Saving secure data...";
+            saveBtn.disabled = true;
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                database[selectedUnit] = payload;
+                statusMsg.innerText = "✅ Saved successfully!";
+                setTimeout(() => statusMsg.innerText = "", 3000);
+            })
+            .catch(error => {
+                statusMsg.innerText = "❌ Failed to save. Check connection.";
+                saveBtn.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
